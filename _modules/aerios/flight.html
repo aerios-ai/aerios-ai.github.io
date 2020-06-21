@@ -32,7 +32,7 @@
       
         <img class="logo" src="../../_static/logo.png" alt="logo"/>
       
-        <span class="site-name">probabilistic programming in aviation</span>
+        <span class="site-name">aviation ai</span>
     </router-link>
   </div>
 
@@ -99,6 +99,18 @@
           </li>
 
         
+          <li class="toctree-l1 "><a href="../../airport.html" class="reference internal ">Airport</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../../airplane.html" class="reference internal ">Airplane</a>
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -127,88 +139,70 @@
   <h1>Source code for aerios.flight</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">aerios.readxml</span> <span class="k">import</span> <span class="n">Xml</span>
-
+<span class="kn">from</span> <span class="nn">aerios.airport</span> <span class="k">import</span> <span class="n">Airport</span>
+<span class="kn">from</span> <span class="nn">aerios.airplane</span> <span class="k">import</span> <span class="n">Airplane</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">radians</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">xml.dom</span> <span class="k">import</span> <span class="n">minidom</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">my_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">fuels_file_location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="s2">&quot;data/fuels.xml&quot;</span><span class="p">)</span>
+<span class="n">NAUTICAL_MILES_INTERVALS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">125</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">4500</span><span class="p">,</span>\
+            <span class="mi">5000</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">6000</span><span class="p">,</span> <span class="mi">7000</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="mi">85000</span><span class="p">]</span>
 <div class="viewcode-block" id="Flight"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight">[docs]</a><span class="k">class</span> <span class="nc">Flight</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Definition of a flight.</span>
+<span class="sd">    Flight constructor.</span>
 
-<span class="sd">    :param list airports: A list of two airports, defined as strings by their IATA codes. </span>
-<span class="sd">    :param string aircraft_type: The type of the aircraft, i.e., ``boeing-747-400``, or ``airbus a380``.</span>
-<span class="sd">    :param string aircraft_registration: The aircraft registration, i.e., ``A6-EDB``. Note that this is not the manufacturer&#39;s ID.</span>
+<span class="sd">    :param list airports: A list of two airports, defined as strings by their IATA codes. The first airport denotes the ``origin``, whilst the second airport denotes the ``destination``. An example of this input is ``[&#39;DOH&#39;, &#39;DCA&#39;]``.</span>
+<span class="sd">    :param string airplane: This can be the type of the aircraft, i.e., ``boeing 747-400``, or ``airbus a380`` or its registration i.e., ``A6-EDB``. Typically, aircraft types will have the manufacturer&#39;s name first followed by a space and then the type of aircraft. </span>
 <span class="sd">    </span>
+<span class="sd">    **Sample constructor initialisations**::</span>
+
+<span class="sd">        import aerios as ae</span>
+
+<span class="sd">        # Create a flight between Doha and Washington-Regean for aircraft registration A6-EDB</span>
+<span class="sd">        myflight = ae.Flight(airports=[&#39;DOH&#39;, &#39;DCA&#39;], airplane=&#39;A6-EDB&#39;)</span>
+
+<span class="sd">        # Create a flight between London Heathrow and Paris Orly for a boeing 737</span>
+<span class="sd">        myflight = ae.Flight(airports=[&#39;LHR&#39;, &#39;ORY&#39;], airplane=&#39;boeing 737&#39;)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">airports</span><span class="p">,</span> <span class="n">aircraft_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aircraft_registration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">airports</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="s1">&#39;The list airports should only have two IATA codes.&#39;</span><span class="p">)</span>
-        <span class="c1"># Aircraft inputs!</span>
-        <span class="k">if</span> <span class="n">aircraft_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;aircraft-type&#39;</span>
-            <span class="n">xmldata_airline</span> <span class="o">=</span> <span class="n">Xml</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">aircraft_type</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">aircraft_registration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;aircraft-registration&#39;</span>
-            <span class="n">xmldata_airline</span> <span class="o">=</span> <span class="n">Xml</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">aircraft_id</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="s1">&#39;You must either provide an aircraft registration or an aircraft ID, but not both.&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aircraft_type</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">aircraft_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">airline</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">airline</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">status</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">engine_id</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">engine_id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_engines</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">number_of_engines</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first_flight</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">first_flight</span>
-        <span class="c1"># Airport inputs!</span>
-        <span class="n">xmldata_airports</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">airport</span> <span class="ow">in</span> <span class="n">airports</span><span class="p">:</span>
-            <span class="n">xmldata_airports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Xml</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;airport&#39;</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">airport</span><span class="p">)</span> <span class="p">)</span>
-<div class="viewcode-block" id="Flight.get_fuel_estimate"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_fuel_estimate">[docs]</a>    <span class="k">def</span> <span class="nf">get_fuel_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">airports</span><span class="p">,</span> <span class="n">airplane</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">Airport</span><span class="p">(</span><span class="n">airports</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="n">Airport</span><span class="p">(</span><span class="n">airports</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myplane</span> <span class="o">=</span> <span class="n">Airplane</span><span class="p">(</span><span class="n">airplane</span><span class="p">)</span>
+<div class="viewcode-block" id="Flight.get_fuel_estimate"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_fuel_estimate">[docs]</a>    <span class="k">def</span> <span class="nf">get_fuel_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the fuel estimate for the flight.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            param1: The first parameter.</span>
-<span class="sd">            param2: The second parameter.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: The return value. True for success, False otherwise.</span>
+<span class="sd">        :param Flight self: An instance of the Flight class.</span>
+<span class="sd">        :param string output: An input to specify whether the fuel estimate is given as ``kg`` or ``pounds``; default is the former.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mi">0</span></div>
-<div class="viewcode-block" id="Flight.get_trajectory"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+        <span class="c1"># Using the standard great circle formula!</span>
+        <span class="p">[</span><span class="n">miles</span><span class="p">,</span> <span class="n">fuel</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fuel_data</span><span class="p">()</span>
+        <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">lattitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">lattitude</span><span class="p">])</span>
+        <span class="n">great_circle_distance</span> <span class="o">=</span>  <span class="mf">3958.756</span> <span class="o">*</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lon1</span> <span class="o">-</span> <span class="n">lon2</span><span class="p">))</span> <span class="p">)</span></div>
+<div class="viewcode-block" id="Flight.get_fuel_data"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_fuel_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_fuel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computes the great circle trajectory of the flight.</span>
+<span class="sd">        Retrieves the fuel vs. range graph for a particular aircraft.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            param1: The first parameter.</span>
-<span class="sd">            param2: The second parameter.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: The return value. True for success, False otherwise.</span>
+<span class="sd">        :param Flight self: An instance of the Flight class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mi">0</span></div>
-<div class="viewcode-block" id="Flight.get_pollution_levels"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_pollution_levels">[docs]</a>    <span class="k">def</span> <span class="nf">get_pollution_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create toctree_data, used to build sidebar navigation</span>
-
-<span class="sd">        :param pagename: The name of the page</span>
-<span class="sd">        :type pagename: str</span>
-<span class="sd">        :param templatename: The name of the templatename</span>
-<span class="sd">        :type templatename: str</span>
-<span class="sd">        :param context: The context</span>
-<span class="sd">        :type context: dict</span>
-<span class="sd">        :param doctree: A doctree</span>
-<span class="sd">        :type doctree: docutils.nodes.document</span>
-
-<span class="sd">        Add to `toctree_data` to `context` that will be available on templates.</span>
-<span class="sd">        Although data is &quot;global&quot;, it is called once per page because current</span>
-<span class="sd">        page is &quot;highlighted&quot;, and some part of TOC might be collapsed.</span>
-
-<span class="sd">        :return: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mi">0</span></div>
-<div class="viewcode-block" id="Flight.get_noise_levels"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_noise_levels">[docs]</a>    <span class="k">def</span> <span class="nf">get_noise_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computes the noise levels.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mi">0</span></div></div>
-        
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">fuels_file_location</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">myplane</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//aircraft[@aircraft_type&#39;&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">myplane</span><span class="o">.</span><span class="n">type</span><span class="o">+</span><span class="s2">&quot;&#39;]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">port</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">nautical_miles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fuel_consumption</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">miles</span> <span class="ow">in</span> <span class="n">NAUTICAL_MILES_INTERVALS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">fuel_consumption</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span> <span class="n">port</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;miles_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">miles</span><span class="p">)))</span> <span class="p">)</span>
+                <span class="n">nautical_miles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">miles</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">nautical_miles</span><span class="p">,</span> <span class="n">fuel_consumption</span><span class="p">]</span></div></div>
 </pre></div>
 
           </div>

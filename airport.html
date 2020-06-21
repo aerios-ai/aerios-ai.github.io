@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>Python Module Index</title>
+      <title>Airport</title>
     
       <link rel="stylesheet" href="_static/pygments.css">
       <link rel="stylesheet" href="_static/theme.css">
@@ -23,9 +23,8 @@
     
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
- 
-
-
+  <link rel="next" title="Airplane" href="airplane.html" />
+  <link rel="prev" title="Flight" href="flight.html" /> 
   </head>
 
   <body>
@@ -94,7 +93,7 @@
       <p class="caption">
         <span class="caption-text"><a href="index.html#aerios">aerios</a></span>
       </p>
-      <ul class="">
+      <ul class="current">
         
           <li class="toctree-l1 "><a href="flight.html" class="reference internal ">Flight</a>
 
@@ -102,8 +101,14 @@
           </li>
 
         
-          <li class="toctree-l1 "><a href="airport.html" class="reference internal ">Airport</a>
+          <li class="toctree-l1 current"><a href="#" class="reference internal current">Airport</a>
 
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#airport" class="reference internal">Airport</a></li>
+                
+              </ul>
             
           </li>
 
@@ -126,55 +131,60 @@
   <ul class="breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
     
-    <li>Python Module Index</li>
+    <li>Airport</li>
   </ul>
   
 
   <ul class="page-nav">
+  <li class="prev">
+    <a href="flight.html"
+       title="previous chapter">← Flight</a>
+  </li>
+  <li class="next">
+    <a href="airplane.html"
+       title="next chapter">Airplane →</a>
+  </li>
 </ul>
   
 </div>
 <hr>
           <div class="content" role="main">
             
+  <div class="section" id="airport">
+<h1>Airport<a class="headerlink" href="#airport" title="Permalink to this headline">¶</a></h1>
+<p>An airport class is used to identify characteristics of an airport, such as its location.</p>
+<span class="target" id="module-aerios.airport"></span><dl class="class">
+<dt id="aerios.airport.Airport">
+<em class="property">class </em><code class="descclassname">aerios.airport.</code><code class="descname">Airport</code><span class="sig-paren">(</span><em>iata_airport_code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/aerios/airport.html#Airport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aerios.airport.Airport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Airport constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>iata_airport_code</strong> (<em>string</em>) – The three character Internatioanl Air Transport Association (IATA) code assigned to a given airport.</p>
+</dd>
+</dl>
+<p><strong>Sample constructor initialisations</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aerios</span> <span class="k">as</span> <span class="nn">ae</span>
 
-   <h1>Python Module Index</h1>
+<span class="c1"># Create an instance of the Airport class for Doha airport.</span>
+<span class="n">myairport</span> <span class="o">=</span> <span class="n">Airport</span><span class="p">(</span><span class="s1">&#39;DOH&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
-   <div class="modindex-jumpbox">
-   <a href="#cap-a"><strong>a</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-a"><td></td><td>
-       <strong>a</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <code class="xref">aerios</code></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="airplane.html#module-aerios.airplane"><code class="xref">aerios.airplane</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="airport.html#module-aerios.airport"><code class="xref">aerios.airport</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="flight.html#module-aerios.flight"><code class="xref">aerios.flight</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+</div>
 
 
           </div>
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="flight.html"
+       title="previous chapter">← Flight</a>
+  </li>
+  <li class="next">
+    <a href="airplane.html"
+       title="next chapter">Airplane →</a>
+  </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2020 by Aerios.
     <br>
