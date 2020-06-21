@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Flight</title>
+    
+      <link rel="stylesheet" href="_static/pygments.css">
+      <link rel="stylesheet" href="_static/theme.css">
+      <link rel="stylesheet" href="_static/romnnn_sphinx_press_theme.css">
+      
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+
+      <!-- sphinx script_files -->
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+
+      
+      <script src="_static/theme-vendors.js"></script>
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="prev" title="Aerios" href="index.html" /> 
+  </head>
+
+  <body>
+    <div id="app" class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <div class="home-link-container">
+      <router-link to="index.html" class="home-link">
+      
+        <img class="logo" src="_static/logo.png" alt="logo"/>
+      
+        <span class="site-name">probabilistic programming in aviation</span>
+    </router-link>
+  </div>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+  
+    <div class="nav-item">
+      <a href="https://github.com/romnnn/sphinx_press_theme"
+        class="nav-link external">
+          Github <outboundlink/>
+      </a>
+    </div>
+  
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+  
+    <div class="nav-item">
+      <a href="https://github.com/romnnn/sphinx_press_theme"
+        class="nav-link external">
+          Github <outboundlink/>
+      </a>
+    </div>
+  
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Search</span>
+    <div class="searchformwrapper">
+      <form autocomplete="off" class="search" action="search.html" method="get">
+        <input type="text" name="q" autocomplete="off" />
+        <input type="submit" value="Go" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#aerios">aerios</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 current"><a href="#" class="reference internal current">Flight</a>
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#flight" class="reference internal">Flight</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Flight</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← Aerios</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main">
+            
+  <div class="section" id="flight">
+<h1>Flight<a class="headerlink" href="#flight" title="Permalink to this headline">¶</a></h1>
+<p>A flight is one of the main building blocks in Aerios. A flight is defined by an aircraft taking a uni-directional journey
+from one airport to another.</p>
+<span class="target" id="module-aerios.flight"></span><dl class="class">
+<dt id="aerios.flight.Flight">
+<em class="property">class </em><code class="descclassname">aerios.flight.</code><code class="descname">Flight</code><span class="sig-paren">(</span><em>airports</em>, <em>aircraft_type=None</em>, <em>aircraft_registration=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/aerios/flight.html#Flight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aerios.flight.Flight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition of a flight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>airports</strong> (<em>list</em>) – A list of two airports, defined as strings by their IATA codes.</p></li>
+<li><p><strong>aircraft_type</strong> (<em>string</em>) – The type of the aircraft, i.e., <code class="docutils literal notranslate"><span class="pre">boeing-747-400</span></code>, or <code class="docutils literal notranslate"><span class="pre">airbus</span> <span class="pre">a380</span></code>.</p></li>
+<li><p><strong>aircraft_registration</strong> (<em>string</em>) – The aircraft registration, i.e., <code class="docutils literal notranslate"><span class="pre">A6-EDB</span></code>. Note that this is not the manufacturer’s ID.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="aerios.flight.Flight.get_fuel_estimate">
+<code class="descname">get_fuel_estimate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/aerios/flight.html#Flight.get_fuel_estimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aerios.flight.Flight.get_fuel_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the fuel estimate for the flight.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>param1: The first parameter.
+param2: The second parameter.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bool: The return value. True for success, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aerios.flight.Flight.get_noise_levels">
+<code class="descname">get_noise_levels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/aerios/flight.html#Flight.get_noise_levels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aerios.flight.Flight.get_noise_levels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the noise levels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aerios.flight.Flight.get_pollution_levels">
+<code class="descname">get_pollution_levels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/aerios/flight.html#Flight.get_pollution_levels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aerios.flight.Flight.get_pollution_levels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create toctree_data, used to build sidebar navigation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pagename</strong> (<em>str</em>) – The name of the page</p></li>
+<li><p><strong>templatename</strong> (<em>str</em>) – The name of the templatename</p></li>
+<li><p><strong>context</strong> (<em>dict</em>) – The context</p></li>
+<li><p><strong>doctree</strong> (<em>docutils.nodes.document</em>) – A doctree</p></li>
+</ul>
+</dd>
+</dl>
+<p>Add to <cite>toctree_data</cite> to <cite>context</cite> that will be available on templates.
+Although data is “global”, it is called once per page because current
+page is “highlighted”, and some part of TOC might be collapsed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="aerios.flight.Flight.get_trajectory">
+<code class="descname">get_trajectory</code><span class="sig-paren">(</span><em>param1</em>, <em>param2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/aerios/flight.html#Flight.get_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aerios.flight.Flight.get_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the great circle trajectory of the flight.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>param1: The first parameter.
+param2: The second parameter.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bool: The return value. True for success, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← Aerios</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2020 by Aerios.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1 with <a href="https://github.com/romnnn/sphinx_press_theme">Press Theme</a>.
+</div>
+            </div>
+          </div>
+      </page>
+    </div>
+    
+    
+  </body>
+</html>

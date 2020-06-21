@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Aerios</title>
+    
+      <link rel="stylesheet" href="_static/pygments.css">
+      <link rel="stylesheet" href="_static/theme.css">
+      <link rel="stylesheet" href="_static/romnnn_sphinx_press_theme.css">
+      
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+
+      <!-- sphinx script_files -->
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+
+      
+      <script src="_static/theme-vendors.js"></script>
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Flight" href="flight.html" /> 
+  </head>
+
+  <body>
+    <div id="app" class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <div class="home-link-container">
+      <router-link to="#" class="home-link">
+      
+        <img class="logo" src="_static/logo.png" alt="logo"/>
+      
+        <span class="site-name">probabilistic programming in aviation</span>
+    </router-link>
+  </div>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+  
+    <div class="nav-item">
+      <a href="https://github.com/romnnn/sphinx_press_theme"
+        class="nav-link external">
+          Github <outboundlink/>
+      </a>
+    </div>
+  
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+  
+    <div class="nav-item">
+      <a href="https://github.com/romnnn/sphinx_press_theme"
+        class="nav-link external">
+          Github <outboundlink/>
+      </a>
+    </div>
+  
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Search</span>
+    <div class="searchformwrapper">
+      <form autocomplete="off" class="search" action="search.html" method="get">
+        <input type="text" name="q" autocomplete="off" />
+        <input type="submit" value="Go" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="#aerios">aerios</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 "><a href="flight.html" class="reference internal ">Flight</a>
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+    
+    <li>Aerios</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="next">
+    <a href="flight.html"
+       title="next chapter">Flight →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main">
+            
+  <div class="section" id="aerios">
+<h1>Aerios<a class="headerlink" href="#aerios" title="Permalink to this headline">¶</a></h1>
+<p>Aerios is an aviation database and coding framework designed for easy deployment of machine learning, probabilistic programming, and optimization under uncertainty methods for commerical aviation. The current aviation data market has numerous vendors of aircraft data (Openflights, Airfleets, FlightAware, Flightradar24, Flightstats, Planefinder), in addition to numerous companies that offer bespoke data-science based algorithms and software products. The goal of this project is to bridge the gap between these two communities. More specifically, our motivation is to not treat the underlying challenges as strictly <cite>data science</cite> ones, but rather to view them through a holistic lens that combines computational statistics, numerical linear algebra, and aerospace engineering.</p>
+<p>Some of the key challenges that underpin Aerios is the need for:</p>
+<ul class="simple">
+<li><p>Greater transparency in pollution, noise levels and fuel consumption of aircrafts.</p></li>
+<li><p>Techniques for understanding the impact of weather on aircraft network performance.</p></li>
+<li><p>Leveraging known lower-order aerodynamic models for performance.</p></li>
+<li><p>Utilities for fast visualisation of the data.</p></li>
+<li><p>Developing prognostic tools for fleet management and operations–leveraging graph network structures.</p></li>
+</ul>
+<p>Aerios is coded entirely in python and is supported by XML files that contain airline, aircraft (airframe), and engine data.</p>
+<a class="reference internal image-reference" href="_images/image.png"><img alt="map to buried treasure" class="align-center" src="_images/image.png" style="width: 450px;" /></a>
+<p><strong>Core modules</strong></p>
+<p>Below is a listing of the core modules.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="flight.html">Flight</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="next">
+    <a href="flight.html"
+       title="next chapter">Flight →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2020 by Aerios.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1 with <a href="https://github.com/romnnn/sphinx_press_theme">Press Theme</a>.
+</div>
+            </div>
+          </div>
+      </page>
+    </div>
+    
+    
+  </body>
+</html>

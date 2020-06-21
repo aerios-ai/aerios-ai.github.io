@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>aerios.flight</title>
+    
+      <link rel="stylesheet" href="../../_static/pygments.css">
+      <link rel="stylesheet" href="../../_static/theme.css">
+      <link rel="stylesheet" href="../../_static/romnnn_sphinx_press_theme.css">
+      
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+
+      <!-- sphinx script_files -->
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+
+      
+      <script src="../../_static/theme-vendors.js"></script>
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app" class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <div class="home-link-container">
+      <router-link to="../../index.html" class="home-link">
+      
+        <img class="logo" src="../../_static/logo.png" alt="logo"/>
+      
+        <span class="site-name">probabilistic programming in aviation</span>
+    </router-link>
+  </div>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+  
+    <div class="nav-item">
+      <a href="https://github.com/romnnn/sphinx_press_theme"
+        class="nav-link external">
+          Github <outboundlink/>
+      </a>
+    </div>
+  
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+  
+    <div class="nav-item">
+      <a href="https://github.com/romnnn/sphinx_press_theme"
+        class="nav-link external">
+          Github <outboundlink/>
+      </a>
+    </div>
+  
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Search</span>
+    <div class="searchformwrapper">
+      <form autocomplete="off" class="search" action="../../search.html" method="get">
+        <input type="text" name="q" autocomplete="off" />
+        <input type="submit" value="Go" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#aerios">aerios</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 "><a href="../../flight.html" class="reference internal ">Flight</a>
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>aerios.flight</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main">
+            
+  <h1>Source code for aerios.flight</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">aerios.readxml</span> <span class="k">import</span> <span class="n">Xml</span>
+
+<div class="viewcode-block" id="Flight"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight">[docs]</a><span class="k">class</span> <span class="nc">Flight</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Definition of a flight.</span>
+
+<span class="sd">    :param list airports: A list of two airports, defined as strings by their IATA codes. </span>
+<span class="sd">    :param string aircraft_type: The type of the aircraft, i.e., ``boeing-747-400``, or ``airbus a380``.</span>
+<span class="sd">    :param string aircraft_registration: The aircraft registration, i.e., ``A6-EDB``. Note that this is not the manufacturer&#39;s ID.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">airports</span><span class="p">,</span> <span class="n">aircraft_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aircraft_registration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">airports</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="s1">&#39;The list airports should only have two IATA codes.&#39;</span><span class="p">)</span>
+        <span class="c1"># Aircraft inputs!</span>
+        <span class="k">if</span> <span class="n">aircraft_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;aircraft-type&#39;</span>
+            <span class="n">xmldata_airline</span> <span class="o">=</span> <span class="n">Xml</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">aircraft_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">aircraft_registration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;aircraft-registration&#39;</span>
+            <span class="n">xmldata_airline</span> <span class="o">=</span> <span class="n">Xml</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">aircraft_id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="s1">&#39;You must either provide an aircraft registration or an aircraft ID, but not both.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aircraft_type</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">aircraft_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">airline</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">airline</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">status</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine_id</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">engine_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_engines</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">number_of_engines</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_flight</span> <span class="o">=</span> <span class="n">xmldata_airline</span><span class="o">.</span><span class="n">first_flight</span>
+        <span class="c1"># Airport inputs!</span>
+        <span class="n">xmldata_airports</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">airport</span> <span class="ow">in</span> <span class="n">airports</span><span class="p">:</span>
+            <span class="n">xmldata_airports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Xml</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;airport&#39;</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">airport</span><span class="p">)</span> <span class="p">)</span>
+<div class="viewcode-block" id="Flight.get_fuel_estimate"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_fuel_estimate">[docs]</a>    <span class="k">def</span> <span class="nf">get_fuel_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the fuel estimate for the flight.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param1: The first parameter.</span>
+<span class="sd">            param2: The second parameter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: The return value. True for success, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="Flight.get_trajectory"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the great circle trajectory of the flight.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param1: The first parameter.</span>
+<span class="sd">            param2: The second parameter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: The return value. True for success, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="Flight.get_pollution_levels"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_pollution_levels">[docs]</a>    <span class="k">def</span> <span class="nf">get_pollution_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create toctree_data, used to build sidebar navigation</span>
+
+<span class="sd">        :param pagename: The name of the page</span>
+<span class="sd">        :type pagename: str</span>
+<span class="sd">        :param templatename: The name of the templatename</span>
+<span class="sd">        :type templatename: str</span>
+<span class="sd">        :param context: The context</span>
+<span class="sd">        :type context: dict</span>
+<span class="sd">        :param doctree: A doctree</span>
+<span class="sd">        :type doctree: docutils.nodes.document</span>
+
+<span class="sd">        Add to `toctree_data` to `context` that will be available on templates.</span>
+<span class="sd">        Although data is &quot;global&quot;, it is called once per page because current</span>
+<span class="sd">        page is &quot;highlighted&quot;, and some part of TOC might be collapsed.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+<div class="viewcode-block" id="Flight.get_noise_levels"><a class="viewcode-back" href="../../flight.html#aerios.flight.Flight.get_noise_levels">[docs]</a>    <span class="k">def</span> <span class="nf">get_noise_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the noise levels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+        
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2020 by Aerios.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1 with <a href="https://github.com/romnnn/sphinx_press_theme">Press Theme</a>.
+</div>
+            </div>
+          </div>
+      </page>
+    </div>
+    
+    
+  </body>
+</html>
